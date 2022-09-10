@@ -4,6 +4,7 @@
 echo "build unifile qsb..."
 rm -rf ../var/*
 mkdir -p ../var/qsb
+./minify
 #mkdir -p ../lua/var
 cd ../lua/bin
 lua writer.lua

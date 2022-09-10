@@ -204,7 +204,7 @@ function ModuleDialogSystem.Global:NextPage(_PlayerID)
         self:EndDialog(_PlayerID);
     end
 end
--- ModuleDialogSystem.Global:NextPage(_PlayerID);
+
 function ModuleDialogSystem.Global:OnOptionSelected(_PlayerID, _OptionID)
     if self.Dialog[_PlayerID] == nil then
         return;
