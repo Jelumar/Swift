@@ -40,8 +40,10 @@ You may use and modify this file unter the terms of the MIT licence.
 -- @field EntityOwnerChanged Ein Entity wechselt den Besitzer. (Parameter: OldID, OldPlayer, NewID, OldPlayer)
 -- @field EntityResourceChanged Resourcen im Entity verändern sich. (Parameter: EntityID, GoodType, OldAmount, NewAmount)
 -- @field BuildingConstructed Ein Gebäude wurde fertiggestellt. (Parameter: BuildingID, PlayerID)
--- @field BuildingUpgraded Ein Gebäude wurde aufgewertet. (Parameter: BuildingID, PlayerID, NewUpgradeLevel)
+-- @field BuildingUpgradeFinished Ein Gebäude wurde aufgewertet. (Parameter: BuildingID, PlayerID, NewUpgradeLevel)
 -- @field BuildingUpgradeCollapsed Eine Ausbaustufe eines Gebäudes wurde zerstört. (Parameter: BuildingID, PlayerID, NewUpgradeLevel)
+-- @field BuildingUpgradeStarted  Ein Ausbau wurde gestartet. (Parameter: EntityID, PlayerID)
+-- @field BuildingUpgradeCanceled Ein Ausbau wurde abgebrochen. (Parameter: EntityID, PlayerID)
 -- @field ThiefInfiltratedBuilding Ein Dieb hat ein Gebäude infiltriert. (Parameter: ThiefID, PlayerID, BuildingID, BuildingPlayerID)
 -- @field ThiefDeliverEarnings Ein Dieb liefert seine Beute ab. (Parameter: ThiefID, PlayerID, BuildingID, BuildingPlayerID, GoldAmount)
 --
@@ -103,5 +105,19 @@ end
 --
 function API.ThiefDisableCisternEffect(_Flag)
     ModuleEntityEventCore.Global.DisableThiefCisternSabotage = _Flag == true;
+end
+
+-- Local callbacks
+
+function SCP.EntityEventCore.StartBuildingUpgrade(_BuildingID, _PlayerID)
+    if Logic.IsBuildingBeingUpgraded(_BuildingID) then
+        ModuleEntityEventCore.Global:SendStartBuildingUpgradeEvent(_BuildingID, _PlayerID);
+    end
+end
+
+function SCP.EntityEventCore.CancelBuildingUpgrade(_BuildingID, _PlayerID)
+    if not Logic.IsBuildingBeingUpgraded(_BuildingID) then
+        ModuleEntityEventCore.Global:SendCancelBuildingUpgradeEvent(_BuildingID, _PlayerID);
+    end
 end
 

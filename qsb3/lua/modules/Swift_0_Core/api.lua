@@ -937,6 +937,8 @@ function API.BroadcastScriptCommand(_NameOrID, ...)
     Swift:DispatchScriptCommand(ID, 0, unpack(arg));
 end
 
+-- Does this function makes any sense? Calling the synchronization but only for
+-- one player seems to be stupid...
 function API.SendScriptCommand(_NameOrID, ...)
     local ID = _NameOrID;
     if type(ID) == "string" then
@@ -950,7 +952,7 @@ function API.SendScriptCommand(_NameOrID, ...)
     if not GUI then
         return;
     end
-    Swift:DispatchScriptCommand(ID, 0, unpack(arg));
+    Swift:DispatchScriptCommand(ID, GUI.GetPlayerID(), unpack(arg));
 end
 
 -- Event

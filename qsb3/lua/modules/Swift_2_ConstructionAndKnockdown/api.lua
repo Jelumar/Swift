@@ -36,7 +36,7 @@ You may use and modify this file unter the terms of the MIT licence.
 -- Events, auf die reagiert werden kann.
 --
 -- @field BuildingKnockdown Ein Gebäude wurde zum Abriss markiert. (Parameter: EntityID, PlayerID, _State)
--- <br>Gebäude, die noch nicht fertig gebaut sind, werden sofort abgerissen!
+--                          <br>Gebäude, die noch nicht fertig gebaut sind, werden sofort abgerissen!
 --
 -- @within Event
 --
