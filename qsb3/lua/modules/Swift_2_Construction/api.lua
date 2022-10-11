@@ -1,5 +1,5 @@
 --[[
-Swift_2_ConstructionAndKnockdown/API
+Swift_2_Construction/API
 
 Copyright (C) 2021 - 2022 totalwarANGEL - All Rights Reserved.
 
@@ -81,8 +81,8 @@ QSB.ScriptEvents = QSB.ScriptEvents or {};
 -- end);
 --
 function API.AddConstructionRestriction(_Function)
-    local ID = ModuleConstructionControl.Global:GenerateConstructionConditionID();
-    ModuleConstructionControl.Global.ConstructionConditions[ID] = _Function;
+    local ID = ModuleConstruction.Global:GenerateConstructionConditionID();
+    ModuleConstruction.Global.ConstructionConditions[ID] = _Function;
     return ID;
 end
 
@@ -94,7 +94,7 @@ end
 -- @usage API.RemoveConstructionRestriction(SomeRestrictionID);
 --
 function API.RemoveConstructionRestriction(_ID)
-    ModuleConstructionControl.Global.ConstructionConditions[_ID] = nil;
+    ModuleConstruction.Global.ConstructionConditions[_ID] = nil;
 end
 
 ---
@@ -295,8 +295,8 @@ end
 -- end);
 --
 function API.AddKnockdownRestriction(_Function)
-    local ID = ModuleConstructionControl.Global:GenerateKnockdownConditionID();
-    ModuleConstructionControl.Global.KnockdownConditions[ID] = _Function;
+    local ID = ModuleConstruction.Global:GenerateKnockdownConditionID();
+    ModuleConstruction.Global.KnockdownConditions[ID] = _Function;
     return ID;
 end
 
@@ -308,7 +308,7 @@ end
 -- @usage API.RemoveKnockdownRestriction(SomeRestrictionID);
 --
 function API.RemoveKnockdownRestriction(_ID)
-    ModuleConstructionControl.Global.KnockdownConditions[_ID] = nil;
+    ModuleConstruction.Global.KnockdownConditions[_ID] = nil;
 end
 
 ---
@@ -493,7 +493,7 @@ end
 
 -- Local callbacks
 
-function SCP.ConstructionAndKnockdown.CancelKnockdown(_BuildingID, _PlayerID, _State)
-    ModuleConstructionControl.Global:CheckCancelBuildingKnockdown(_BuildingID, _PlayerID, _State)
+function SCP.Construction.CancelKnockdown(_BuildingID, _PlayerID, _State)
+    ModuleConstruction.Global:CheckCancelBuildingKnockdown(_BuildingID, _PlayerID, _State)
 end
 

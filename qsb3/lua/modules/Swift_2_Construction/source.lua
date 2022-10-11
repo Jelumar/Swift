@@ -1,5 +1,5 @@
 --[[
-Swift_2_ConstructionAndKnockdown/API
+Swift_2_Construction/API
 
 Copyright (C) 2021 - 2022 totalwarANGEL - All Rights Reserved.
 
@@ -8,11 +8,11 @@ You may use and modify this file unter the terms of the MIT licence.
 (See https://en.wikipedia.org/wiki/MIT_License)
 ]]
 
-SCP.ConstructionAndKnockdown = {};
+SCP.Construction = {};
 
-ModuleConstructionControl = {
+ModuleConstruction = {
     Properties = {
-        Name = "ModuleConstructionControl",
+        Name = "ModuleConstruction",
     },
 
     Global = {
@@ -42,21 +42,21 @@ ModuleConstructionControl = {
 
 -- Global ------------------------------------------------------------------- --
 
-function ModuleConstructionControl.Global:OnGameStart()
+function ModuleConstruction.Global:OnGameStart()
     QSB.ScriptEvents.BuildingKnockdown = API.RegisterScriptEvent("Event_BuildingKnockdown");
 
-    API.RegisterScriptCommand("Cmd_CheckCancelKnockdown", SCP.ConstructionAndKnockdown.CancelKnockdown);
+    API.RegisterScriptCommand("Cmd_CheckCancelKnockdown", SCP.Construction.CancelKnockdown);
 
     self:OverrideCanPlayerPlaceBuilding();
 end
 
-function ModuleConstructionControl.Global:OnEvent(_ID, _Event, ...)
+function ModuleConstruction.Global:OnEvent(_ID, _Event, ...)
 end
 
-function ModuleConstructionControl.Global:OverrideCanPlayerPlaceBuilding()
+function ModuleConstruction.Global:OverrideCanPlayerPlaceBuilding()
     GameCallback_CanPlayerPlaceBuilding_Orig_ConstructionControl = GameCallback_CanPlayerPlaceBuilding;
     GameCallback_CanPlayerPlaceBuilding = function(_PlayerID, _Type, _x, _y)
-        if not ModuleConstructionControl.Global:CheckConstructionConditions(_PlayerID, _Type, _x, _y) then
+        if not ModuleConstruction.Global:CheckConstructionConditions(_PlayerID, _Type, _x, _y) then
             return false;
         end
         return GameCallback_CanPlayerPlaceBuilding_Orig_ConstructionControl(_PlayerID, _Type, _x, _y);
@@ -65,8 +65,8 @@ function ModuleConstructionControl.Global:OverrideCanPlayerPlaceBuilding()
     -- As last resort to implement this 'cause all other approaches were to
     -- unreliable to accomplish safe wall erasure.
     API.StartHiResJob(function()
-        for i= 1, #ModuleConstructionControl.Shared.WallTypes do
-            local Type = Entities[ModuleConstructionControl.Shared.WallTypes[i]];
+        for i= 1, #ModuleConstruction.Shared.WallTypes do
+            local Type = Entities[ModuleConstruction.Shared.WallTypes[i]];
             if Type then
                 local EntityList = Logic.GetEntitiesOfType(Type);
                 for j= 1, #EntityList do
@@ -88,7 +88,7 @@ function ModuleConstructionControl.Global:OverrideCanPlayerPlaceBuilding()
     end);
 end
 
-function ModuleConstructionControl.Global:CheckCancelBuildingKnockdown(_BuildingID, _PlayerID, _State)
+function ModuleConstruction.Global:CheckCancelBuildingKnockdown(_BuildingID, _PlayerID, _State)
     if Logic.EntityGetPlayer(_BuildingID) == _PlayerID and _State == 1 and not self:CheckKnockdownConditions(_BuildingID) then
         Logic.ExecuteInLuaLocalState(string.format([[GUI.CancelBuildingKnockDown(%d)]], _BuildingID));
     else
@@ -107,12 +107,12 @@ function ModuleConstructionControl.Global:CheckCancelBuildingKnockdown(_Building
     end
 end
 
-function ModuleConstructionControl.Global:GenerateConstructionConditionID()
+function ModuleConstruction.Global:GenerateConstructionConditionID()
     self.ConstructionConditionCounter = self.ConstructionConditionCounter +1;
     return self.ConstructionConditionCounter;
 end
 
-function ModuleConstructionControl.Global:CheckConstructionConditions(_PlayerID, _Type, _x, _y)
+function ModuleConstruction.Global:CheckConstructionConditions(_PlayerID, _Type, _x, _y)
     for k, v in pairs(self.ConstructionConditions) do
         if not v(_PlayerID, _Type, _x, _y) then
             return false;
@@ -121,12 +121,12 @@ function ModuleConstructionControl.Global:CheckConstructionConditions(_PlayerID,
     return true;
 end
 
-function ModuleConstructionControl.Global:GenerateKnockdownConditionID()
+function ModuleConstruction.Global:GenerateKnockdownConditionID()
     self.KnockdownConditionCounter = self.KnockdownConditionCounter +1;
     return self.KnockdownConditionCounter;
 end
 
-function ModuleConstructionControl.Global:CheckKnockdownConditions(_EntityID)
+function ModuleConstruction.Global:CheckKnockdownConditions(_EntityID)
     for k, v in pairs(self.KnockdownConditions) do
         if IsExisting(_EntityID) and not v(_EntityID) then
             return false;
@@ -137,13 +137,13 @@ end
 
 -- Local -------------------------------------------------------------------- --
 
-function ModuleConstructionControl.Local:OnGameStart()
+function ModuleConstruction.Local:OnGameStart()
     QSB.ScriptEvents.BuildingKnockdown = API.RegisterScriptEvent("Event_BuildingKnockdown");
 
     self:OverrideDeleteEntityStateBuilding();
 end
 
-function ModuleConstructionControl.Local:OverrideDeleteEntityStateBuilding()
+function ModuleConstruction.Local:OverrideDeleteEntityStateBuilding()
     GameCallback_GUI_DeleteEntityStateBuilding_Orig_ConstructionControl = GameCallback_GUI_DeleteEntityStateBuilding;
     GameCallback_GUI_DeleteEntityStateBuilding = function(_BuildingID, _State)
         GameCallback_GUI_DeleteEntityStateBuilding_Orig_ConstructionControl(_BuildingID, _State);
@@ -154,5 +154,5 @@ end
 
 -- -------------------------------------------------------------------------- --
 
-Swift:RegisterModule(ModuleConstructionControl);
+Swift:RegisterModule(ModuleConstruction);
 
